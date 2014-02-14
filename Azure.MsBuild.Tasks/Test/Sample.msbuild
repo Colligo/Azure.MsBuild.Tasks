@@ -1,0 +1,18 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <UsingTask TaskName="Azure.MsBuild.Tasks.PublishWorkerRole"  AssemblyFile="..\bin\debug\Azure.MsBuild.Tasks.dll"/>
+
+   <Target Name="Build">
+     <PublishWorkerRole
+       SubscriptionName="Free Trial"
+       Location="West US"
+       WorkerRolePackage="C:\data\source\github\Enoki\Enoki.Azure.WorkerRole.OwinHost\bin\Debug\app.publish\Enoki.Azure.WorkerRole.OwinHost.cspkg"
+       WorkerRoleConfig="C:\data\source\github\Enoki\Enoki.Azure.WorkerRole.OwinHost\bin\Debug\app.publish\ServiceConfiguration.Cloud.cscfg"
+       Slot="Staging"
+       WorkerRoleName="enokiapiworkerrole"
+       PublishSettingsFile="C:\data\source\github\Enoki\.tools\AzurePublish\Enoki.publishsettings"       
+       />
+       <!--
+              ExecutionPolicy="RemoteSigned"
+       -->
+   </Target>
+</Project>
