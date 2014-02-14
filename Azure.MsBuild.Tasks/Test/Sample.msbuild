@@ -5,11 +5,11 @@
      <PublishWorkerRole
        SubscriptionName="Free Trial"
        Location="West US"
-       WorkerRolePackage="C:\data\source\github\Enoki\Enoki.Azure.WorkerRole.OwinHost\bin\Debug\app.publish\Enoki.Azure.WorkerRole.OwinHost.cspkg"
-       WorkerRoleConfig="C:\data\source\github\Enoki\Enoki.Azure.WorkerRole.OwinHost\bin\Debug\app.publish\ServiceConfiguration.Cloud.cscfg"
+       WorkerRolePackage="WorkerRole.cspkg"
+       WorkerRoleConfig="WorkerRole.ServiceConfiguration.Cloud.cscfg"
        Slot="Staging"
-       WorkerRoleName="enokiapiworkerrole"
-       PublishSettingsFile="C:\data\source\github\Enoki\.tools\AzurePublish\Enoki.publishsettings"       
+       WorkerRoleName="MyWorkerRole"
+       PublishSettingsFile="WorkerRole.publishsettings"       
        />
        <!--
               ExecutionPolicy="RemoteSigned"
