@@ -9,7 +9,8 @@
        WorkerRoleConfig="WorkerRole.ServiceConfiguration.Cloud.cscfg"
        Slot="Staging"
        WorkerRoleName="MyWorkerRole"
-       PublishSettingsFile="WorkerRole.publishsettings"       
+       PublishSettingsFile="WorkerRole.publishsettings"
+       AzureModulePath="Microsoft SDKs\Windows Azure\PowerShell\ServiceManagement\Azure\Azure.psd1"
        />
        <!--
               ExecutionPolicy="RemoteSigned"
