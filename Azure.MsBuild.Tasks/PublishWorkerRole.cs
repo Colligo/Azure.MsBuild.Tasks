@@ -13,6 +13,8 @@ namespace Azure.MsBuild.Tasks
     public class PublishWorkerRole : Task
     {
         [Required]
+        public string AzureModulePath { get; set; }
+        [Required]
         public string SubscriptionName { get; set; }
         [Required]
         public string Location { get; set; }
@@ -39,15 +41,15 @@ namespace Azure.MsBuild.Tasks
         private string AzureDeployCommand;
 
         private string DeployCommand = "WorkerRole";
+        private string ProgramFilesPath = null;
 
         public PublishWorkerRole()
         {
 
             var systemRoot = System.Environment.GetEnvironmentVariable("SystemRoot");
             PowerShellLocation = System.IO.Path.Combine(systemRoot, @"System32\WindowsPowerShell\v1.0\powershell.exe");
-            var progFiles = System.Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-            AzurePowerShellLocation = System.IO.Path.Combine(progFiles, @"Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1");
-
+            ProgramFilesPath = System.Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+            
             tempFolder = new DirectoryInfo(System.Environment.GetEnvironmentVariable("temp"));
             if (!tempFolder.Exists) throw new FileNotFoundException("Couldnt resolve the temp path, aborting");
 
@@ -66,11 +68,11 @@ namespace Azure.MsBuild.Tasks
 
         public override bool Execute()
         {
-
             //Azure.MsBuild.Tasks.AzureDeploy.ps1
             //powershell  -Command "Import-Module 'C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1'; .tools\AzurePublish\Enoki.ps1 %*"
 
             Log.LogMessage("Publish Worker Role Task Started");
+            AzurePowerShellLocation = System.IO.Path.Combine(ProgramFilesPath, AzureModulePath);
             if (!System.IO.File.Exists(PowerShellLocation))
             {
                 Log.LogErrorFromException(
