@@ -77,7 +77,7 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			Get-AzureStorageAccount -StorageAccountName $WorkerRoleName
 
 			if ("$?" -eq "False") {
-				# settting our storage account failed, lets force/create one, and then set it
+				# setting our storage account failed, lets force/create one, and then set it
 				#Parameter Set: ParameterSetAffinityGroup
 				#New-AzureStorageAccount [-StorageAccountName] <String> -AffinityGroup <String> [-Description <String> ] [-Label <String> ] [ <CommonParameters>]
 				New-AzureStorageAccount -StorageAccountName $WorkerRoleName -Location $Location
@@ -118,7 +118,7 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			$exitCode = 2;
 		}
 	} else {
-		Write-Host Error loding publish settings from disk.  Aborting!
+		Write-Host Error loading publish settings from disk.  Aborting!
 		$exitCode = 3;
 	}
 
