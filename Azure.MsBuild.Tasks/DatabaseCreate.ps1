@@ -72,15 +72,6 @@ function CreateDB([string]$SubscriptionName, [string]$PublishSettingsFile, [stri
 
 		Write-Host Setting Website $WebsiteName with new Connection Info $connectionStringInfo;
 		Set-AzureWebsite $WebsiteName -ConnectionStrings $listOfConnectionStrings;
-
-
-		#Set new dataconnection string for worker role
-		$file = "$pwd/$WorkerRoleConfig"
-		[xml]$xml = Get-Content $file
-		$xml.ServiceConfiguration.Role.ConfigurationSettings.FirstChild.value = $connectionString
-		$xml.Save($file)
-
-		Set-AzureDeployment -Config -ServiceName "$WorkerRoleName" -Slot Production -Configuration $file
 	}
 	else
 	{

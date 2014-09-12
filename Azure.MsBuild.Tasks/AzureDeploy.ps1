@@ -63,7 +63,7 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			#Parameter Set: CommonSettings
 			#Set-AzureSubscription [-SubscriptionName] <String> [-Certificate <X509Certificate2> ] [-CurrentStorageAccountName <String> ] [-PassThru] [-ServiceEndpoint <String> ] [-SubscriptionDataFile <String> ] [-SubscriptionId <String> ] [ <CommonParameters>]
 
-			Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccountName $WorkerRoleName
+			Select-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccountName $WorkerRoleName
 
 			if ("$?" -eq "False") {
 				Write-Host No subcription found for $WorkerRoleName, will create a new one.
