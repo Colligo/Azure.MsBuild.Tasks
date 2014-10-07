@@ -39,12 +39,17 @@ namespace Azure.MsBuild.Tasks
         [Required]
         public string WorkerRoleName { get; set; }
 
+        [Required]
+        public string DatabaseAdmin { get; set; }
+        [Required]
+        public string DatabasePassword { get; set; }
+
         public string ExecutionPolicy { get; set; }
         private System.IO.DirectoryInfo tempFolder;
         private string AzureDbCreateScript = "DatabaseCreate.ps1";
         private string AzureDbCreateScriptFullPath = null;
         private string AzureDeployCommandFormat =
-            "-Command \"Import-Module '{0}'; {1} -SubscriptionName '{2}' -PublishSettingsFile '{3}' -WebsiteName '{4}' -AzureDatabaseServer '{5}' -DatabaseName '{6}' -WorkerRoleConfig '{7}' -Slot '{8}' -WorkerRoleName '{9}'\"";
+            "-Command \"Import-Module '{0}'; {1} -SubscriptionName '{2}' -PublishSettingsFile '{3}' -WebsiteName '{4}' -AzureDatabaseServer '{5}' -DatabaseName '{6}' -WorkerRoleConfig '{7}' -Slot '{8}' -WorkerRoleName {9} -DatabaseAdmin '{10}' -DatabasePassword '{11}'\"";
         private string AzureDeployCommand;
 
         private string DeployCommand = "CreateNewDB";
@@ -87,7 +92,7 @@ namespace Azure.MsBuild.Tasks
                 return false;
             }
 
-            AzureDeployCommand = string.Format(AzureDeployCommandFormat, AzurePowerShellLocation, AzureDbCreateScriptFullPath, SubscriptionName,PublishSettingsFile, WebsiteName, AzureDatabaseServer, DatabaseName, WorkerRoleConfig, Slot, WorkerRoleName);
+            AzureDeployCommand = string.Format(AzureDeployCommandFormat, AzurePowerShellLocation, AzureDbCreateScriptFullPath, SubscriptionName, PublishSettingsFile, WebsiteName, AzureDatabaseServer, DatabaseName, WorkerRoleConfig, Slot, WorkerRoleName, DatabaseAdmin, DatabasePassword);
             
             Console.WriteLine(string.Format("Executing powershell command:\r\n{0} {1}", PowerShellLocation, AzureDeployCommand));
 

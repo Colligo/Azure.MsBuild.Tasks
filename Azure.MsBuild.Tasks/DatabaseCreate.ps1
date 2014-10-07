@@ -10,6 +10,8 @@ function main($arguments)
 	$WorkerRoleConfig = $null
 	$Slot = $null
 	$WorkerRoleName = $null
+	$DatabaseAdmin = $null
+    $DatabasePassword = $null
 	
 	if($a.contains("PublishSettingsFile")) { $PublishSettingsFile = $a["PublishSettingsFile"]; }
 	if($a.contains("SubscriptionName")) { $SubscriptionName = $a["SubscriptionName"]; }
@@ -19,12 +21,14 @@ function main($arguments)
 	if($a.contains("WorkerRoleConfig")) { $WorkerRoleConfig = $a["WorkerRoleConfig"]; }
 	if($a.contains("Slot")) { $Slot = $a["Slot"]; }
 	if($a.contains("WorkerRoleName")) { $WorkerRoleName = $a["WorkerRoleName"]; }
+	if($a.contains("DatabaseAdmin")) { $DatabaseAdmin = $a["DatabaseAdmin"]; }
+	if($a.contains("DatabasePassword")) { $DatabasePassword = $a["DatabasePassword"]; }
 	
-	return CreateDB $SubscriptionName $PublishSettingsFile $WebsiteName $AzureDatabaseServer $DatabaseName $WorkerRoleConfig $Slot $WorkerRoleName;
+	return CreateDB $SubscriptionName $PublishSettingsFile $WebsiteName $AzureDatabaseServer $DatabaseName $WorkerRoleConfig $Slot $WorkerRoleName $DatabaseAdmin $DatabasePassword;
 }
 
 
-function CreateDB([string]$SubscriptionName, [string]$PublishSettingsFile, [string]$Websiteame, [string]$AzureDatabaseServer, [string]$DatabaseName, [string]$WorkerRoleConfig, [string]$Slot, [string]$WorkerRoleName)
+function CreateDB([string]$SubscriptionName, [string]$PublishSettingsFile, [string]$Websiteame, [string]$AzureDatabaseServer, [string]$DatabaseName, [string]$WorkerRoleConfig, [string]$Slot, [string]$WorkerRoleName, [string]$DatabaseAdmin, [string]$DatabasePassword)
 {
 	write-host PublishSettingsFile $PublishSettingsFile;
 	write-host SubscriptionName $SubscriptionName;
@@ -34,6 +38,8 @@ function CreateDB([string]$SubscriptionName, [string]$PublishSettingsFile, [stri
 	write-host WorkerRoleConfig $WorkerRoleConfig;
 	write-host Slot $Slot;
 	write-host WorkerRoleName $WorkerRoleName;
+	write-host DatabaseAdmin $DatabaseAdmin;
+	write-host DatabasePassword $DatabasePassword;
 
 	
 	Write-Host Importing Azure Publish Settings from  $PublishSettingsFile
@@ -60,8 +66,8 @@ function CreateDB([string]$SubscriptionName, [string]$PublishSettingsFile, [stri
 	if( $? -eq "True")
 	{
 	
-		Write-Host New ConnectionString: "Server=tcp:$AzureDatabaseServer.database.windows.net; Database=$DatabaseName;User ID=abunker@h9fko4mcd5;Password=Default11; Trusted_Connection=False;Encrypt=True;" 
-		$connectionString = "Server=tcp:$AzureDatabaseServer.database.windows.net; Database=$DatabaseName;User ID=abunker@h9fko4mcd5;Password=Default11; Trusted_Connection=False;Encrypt=True;"
+		Write-Host New ConnectionString: "Server=tcp:$AzureDatabaseServer.database.windows.net; Database=$DatabaseName;User ID=$DatabaseAdmin@$AzureDatabaseServer;Password=$DatabasePassword; Trusted_Connection=False;Encrypt=True;" 
+		$connectionString = "Server=tcp:$AzureDatabaseServer.database.windows.net; Database=$DatabaseName;User ID=$DatabaseAdmin@$AzureDatabaseServer;Password=$DatabasePassword; Trusted_Connection=False;Encrypt=True;"
 	
 		$connectionStringInfo = (`
 			@{Name = "Context"; Type = "SQLAzure"; ConnectionString =$connectionString}
