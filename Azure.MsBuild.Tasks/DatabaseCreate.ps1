@@ -63,6 +63,12 @@ function CreateDB([string]$SubscriptionName, [string]$PublishSettingsFile, [stri
 		throw "Azure WorkerRole $WorkerRoleName is null"
 	}
 
+	if( (Get-AzureSqlDatabase -ServerName $AzureDatabaseServer -DatabaseName $DatabaseName) -eq true)
+	{
+		Remove-AzureSqlDatabase -ServerName  $AzureDatabaseServer  -DatabaseName $DatabaseName -force
+	}
+
+
 	if( $? -eq "True")
 	{
 	
