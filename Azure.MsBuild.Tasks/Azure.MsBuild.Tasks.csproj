@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Azure.MsBuild.Tasks">
+      <HintPath>..\packages\Azure.MsBuild.Tasks.0.7-dev\lib\net45\Azure.MsBuild.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -42,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreateNewDatabaseContext.cs" />
     <Compile Include="PublishWorkerRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,7 +52,6 @@
     <EmbeddedResource Include="AzureDeploy.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DatabaseCreate.ps1" />
     <None Include="Test\Sample.msbuild">
       <SubType>Designer</SubType>
     </None>
