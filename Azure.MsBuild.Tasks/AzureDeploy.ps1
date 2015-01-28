@@ -66,7 +66,7 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			Select-AzureSubscription -SubscriptionName $SubscriptionName -Current
 
 			if ("$?" -eq "False") {
-				Write-Host No subcription found #for $WorkerRoleName, will create a new one.
+				Write-Host No subcription found for $WorkerRoleName, will create a new one.
 				#Write-Host New Storage Account finished, will set it as active.
 				Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccount $WorkerRoleName 
 			}
