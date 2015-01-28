@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Azure.MsBuild.Tasks">
-      <HintPath>..\packages\Azure.MsBuild.Tasks.0.7-dev\lib\net45\Azure.MsBuild.Tasks.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Build" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -52,9 +49,7 @@
     <EmbeddedResource Include="AzureDeploy.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Test\Sample.msbuild">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Test\Sample.msbuild"/>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
