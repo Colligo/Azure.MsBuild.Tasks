@@ -63,12 +63,12 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			#Parameter Set: CommonSettings
 			#Set-AzureSubscription [-SubscriptionName] <String> [-Certificate <X509Certificate2> ] [-CurrentStorageAccountName <String> ] [-PassThru] [-ServiceEndpoint <String> ] [-SubscriptionDataFile <String> ] [-SubscriptionId <String> ] [ <CommonParameters>]
 
-			Select-AzureSubscription -SubscriptionName $SubscriptionName 
+			Select-AzureSubscription -SubscriptionName $SubscriptionName -Current
 
 			if ("$?" -eq "False") {
 				Write-Host No subcription found #for $WorkerRoleName, will create a new one.
 				#Write-Host New Storage Account finished, will set it as active.
-				Set-AzureSubscription -SubscriptionName $SubscriptionName 
+				Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccount $WorkerRoleName 
 			}
 
 
