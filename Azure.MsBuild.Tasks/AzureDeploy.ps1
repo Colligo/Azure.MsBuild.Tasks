@@ -64,11 +64,9 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			#Set-AzureSubscription [-SubscriptionName] <String> [-Certificate <X509Certificate2> ] [-CurrentStorageAccountName <String> ] [-PassThru] [-ServiceEndpoint <String> ] [-SubscriptionDataFile <String> ] [-SubscriptionId <String> ] [ <CommonParameters>]
 
 			Select-AzureSubscription -SubscriptionName $SubscriptionName -Current
+			Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccountName $WorkerRoleName 
 
 			if ("$?" -eq "True") {
-				
-			
-
 
 				#Parameter Set: Default
 				#Get-AzureStorageAccount [[-StorageAccountName] <String> ] [ <CommonParameters>]
