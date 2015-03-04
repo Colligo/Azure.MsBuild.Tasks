@@ -112,7 +112,7 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			else
 			{
 				Write-Host Specified Subscription not found: $SubscriptionName 
-				$excitCode = 4;
+				$exitCode = 4;
 			}
 
 		} else {
