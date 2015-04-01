@@ -63,63 +63,65 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 			#Parameter Set: CommonSettings
 			#Set-AzureSubscription [-SubscriptionName] <String> [-Certificate <X509Certificate2> ] [-CurrentStorageAccountName <String> ] [-PassThru] [-ServiceEndpoint <String> ] [-SubscriptionDataFile <String> ] [-SubscriptionId <String> ] [ <CommonParameters>]
 
-			Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccountName $WorkerRoleName
-
-			if ("$?" -eq "False") {
-				Write-Host No subcription found for $WorkerRoleName, will create a new one.
-				Write-Host New Storage Account finished, will set it as active.
-				Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccountName $WorkerRoleName
-			}
-
-
-			#Parameter Set: Default
-			#Get-AzureStorageAccount [[-StorageAccountName] <String> ] [ <CommonParameters>]
-			Get-AzureStorageAccount -StorageAccountName $WorkerRoleName
-
-			if ("$?" -eq "False") {
-				# settting our storage account failed, lets force/create one, and then set it
-				#Parameter Set: ParameterSetAffinityGroup
-				#New-AzureStorageAccount [-StorageAccountName] <String> -AffinityGroup <String> [-Description <String> ] [-Label <String> ] [ <CommonParameters>]
-				New-AzureStorageAccount -StorageAccountName $WorkerRoleName -Location $Location
-			}
-
-
-			Write-Host Attempting to get the current azure deployment -ServiceName $WorkerRoleName -Slot $Slot
-			#Parameter Set: Default
-			#Get-AzureDeployment [-ServiceName] <String> [[-Slot] <String> ] [ <CommonParameters>]
-			Get-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot
+			Select-AzureSubscription -SubscriptionName $SubscriptionName -Current
+			Set-AzureSubscription -SubscriptionName $SubscriptionName -CurrentStorageAccountName $WorkerRoleName 
 
 			if ("$?" -eq "True") {
-				Write-Host Received a valid azure deployment, $WorkerRoleName ($Slot) so it will be deleted
+
 				#Parameter Set: Default
-				#Remove-AzureDeployment [-ServiceName] <String> [-Slot] <String> [-Force] [ <CommonParameters>]
-				Remove-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot -Force
+				#Get-AzureStorageAccount [[-StorageAccountName] <String> ] [ <CommonParameters>]
+				Get-AzureStorageAccount -StorageAccountName $WorkerRoleName
+
+				if ("$?" -eq "False") {
+					# setting our storage account failed, lets force/create one, and then set it
+					#Parameter Set: ParameterSetAffinityGroup
+					#New-AzureStorageAccount [-StorageAccountName] <String> -AffinityGroup <String> [-Description <String> ] [-Label <String> ] [ <CommonParameters>]
+					New-AzureStorageAccount -StorageAccountName $WorkerRoleName -Location $Location
+				}
+
+
+				Write-Host Attempting to get the current azure deployment -ServiceName $WorkerRoleName -Slot $Slot
+				#Parameter Set: Default
+				#Get-AzureDeployment [-ServiceName] <String> [[-Slot] <String> ] [ <CommonParameters>]
+				Get-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot
+
+				if ("$?" -eq "True") {
+					Write-Host Received a valid azure deployment, $WorkerRoleName ($Slot) so it will be deleted
+					#Parameter Set: Default
+					#Remove-AzureDeployment [-ServiceName] <String> [-Slot] <String> [-Force] [ <CommonParameters>]
+					Remove-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot -Force
+				}
+
+				Write-Host Attempting to get the Azure Service: $WorkerRoleName
+				#Parameter Set: Default
+				#Get-AzureService [[-ServiceName] <String> ] [ <CommonParameters>]
+				Get-AzureService -ServiceName $WorkerRoleName
+				if ("$?" -eq "False") {
+					Write-Host Failed to get the Azure Service, lets create a new one now
+					#Parameter Set: ParameterSetLocation
+					#New-AzureService [-ServiceName] <String> [-Location] <String> [[-Label] <String> ] [[-Description] <String> ] [ <CommonParameters>]
+					New-AzureService -ServiceName $WorkerRoleName -Location $Location
+				}
+
+
+				Write-Host Deploying a new Azure service: -ServiceName $WorkerRoleName -Slot $Slot ($WorkerRolePackage)
+				#Parameter Set: PaaS
+				#New-AzureDeployment [-ServiceName] <String> [-Package] <String> [-Configuration] <String> [-Slot] <String> [[-Label] <String> ] [[-Name] <String> ] [-DoNotStart] [-ExtensionConfiguration <ExtensionConfigurationInput[]> ] [-TreatWarningsAsError] [ <CommonParameters>]
+				New-AzureDeployment -ServiceName $WorkerRoleName -Package $WorkerRolePackage -Configuration $WorkerRoleConfig -Slot $Slot -Name $WorkerRoleName
 			}
-
-			Write-Host Attempting to get the Azure Service: $WorkerRoleName
-			#Parameter Set: Default
-			#Get-AzureService [[-ServiceName] <String> ] [ <CommonParameters>]
-			Get-AzureService -ServiceName $WorkerRoleName
-			if ("$?" -eq "False") {
-				Write-Host Failed to get the Azure Service, lets create a new one now
-				#Parameter Set: ParameterSetLocation
-				#New-AzureService [-ServiceName] <String> [-Location] <String> [[-Label] <String> ] [[-Description] <String> ] [ <CommonParameters>]
-				New-AzureService -ServiceName $WorkerRoleName -Location $Location
+			else
+			{
+				Write-Host Specified Subscription not found: $SubscriptionName 
+				$exitCode = 4;
 			}
-
-
-			Write-Host Deploying a new Azure service: -ServiceName $WorkerRoleName -Slot $Slot ($WorkerRolePackage)
-			#Parameter Set: PaaS
-			#New-AzureDeployment [-ServiceName] <String> [-Package] <String> [-Configuration] <String> [-Slot] <String> [[-Label] <String> ] [[-Name] <String> ] [-DoNotStart] [-ExtensionConfiguration <ExtensionConfigurationInput[]> ] [-TreatWarningsAsError] [ <CommonParameters>]
-			New-AzureDeployment -ServiceName $WorkerRoleName -Package $WorkerRolePackage -Configuration $WorkerRoleConfig -Slot $Slot -Name $WorkerRoleName
 
 		} else {
 			Write-Host Error getting subscription.  Aborting!
-			$exitCode = 2;
+			$exitCode = 3;
 		}
 	} else {
-		Write-Host Error loding publish settings from disk.  Aborting!
-		$exitCode = 3;
+		Write-Host Error loading publish settings from disk.  Aborting!
+		$exitCode = 2;
 	}
 
 
