@@ -44,8 +44,6 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 	write-host WorkerRoleName = $WorkerRoleName
 	write-host DeployModel = $DeployModel
 	write-host PublishSettingsFile = $PublishSettingsFile
-	write-host AzureStorageAccount = $AzureStorageAccount
-	write-host StorageContainer = $StorageContainer
 
 	Write-Host Azure publishing service.
 	Write-Host Current working folder: $pwd
