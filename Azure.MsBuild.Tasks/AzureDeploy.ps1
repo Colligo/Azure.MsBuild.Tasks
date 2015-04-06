@@ -44,8 +44,8 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 	write-host WorkerRoleName = $WorkerRoleName
 	write-host DeployModel = $DeployModel
 	write-host PublishSettingsFile = $PublishSettingsFile
-	
-
+	write-host AzureStorageAccount = $AzureStorageAccount
+	write-host StorageContainer = $StorageContainer
 
 	Write-Host Azure publishing service.
 	Write-Host Current working folder: $pwd
@@ -79,19 +79,6 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 					New-AzureStorageAccount -StorageAccountName $WorkerRoleName -Location $Location
 				}
 
-
-				Write-Host Attempting to get the current azure deployment -ServiceName $WorkerRoleName -Slot $Slot
-				#Parameter Set: Default
-				#Get-AzureDeployment [-ServiceName] <String> [[-Slot] <String> ] [ <CommonParameters>]
-				Get-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot
-
-				if ("$?" -eq "True") {
-					Write-Host Received a valid azure deployment, $WorkerRoleName ($Slot) so it will be deleted
-					#Parameter Set: Default
-					#Remove-AzureDeployment [-ServiceName] <String> [-Slot] <String> [-Force] [ <CommonParameters>]
-					Remove-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot -Force
-				}
-
 				Write-Host Attempting to get the Azure Service: $WorkerRoleName
 				#Parameter Set: Default
 				#Get-AzureService [[-ServiceName] <String> ] [ <CommonParameters>]
@@ -104,10 +91,22 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 				}
 
 
-				Write-Host Deploying a new Azure service: -ServiceName $WorkerRoleName -Slot $Slot ($WorkerRolePackage)
-				#Parameter Set: PaaS
-				#New-AzureDeployment [-ServiceName] <String> [-Package] <String> [-Configuration] <String> [-Slot] <String> [[-Label] <String> ] [[-Name] <String> ] [-DoNotStart] [-ExtensionConfiguration <ExtensionConfigurationInput[]> ] [-TreatWarningsAsError] [ <CommonParameters>]
-				New-AzureDeployment -ServiceName $WorkerRoleName -Package $WorkerRolePackage -Configuration $WorkerRoleConfig -Slot $Slot -Name $WorkerRoleName
+				Write-Host Attempting to get the current azure deployment -ServiceName $WorkerRoleName -Slot $Slot
+				#Parameter Set: Default
+				#Get-AzureDeployment [-ServiceName] <String> [[-Slot] <String> ] [ <CommonParameters>]
+				Get-AzureDeployment -ServiceName $WorkerRoleName -Slot $Slot
+
+				if ("$?" -eq "True") {
+					Write-Host Received a valid azure deployment, $WorkerRoleName ($Slot) so it will be updated
+					#Parameter Set: Default
+					Set-AzureDeployment -Upgrade -ServiceName $WorkerRoleName -Slot $Slot -Package $WorkerRolePackage -Configuration $WorkerRoleConfig
+				}
+				else {
+					Write-Host Deploying a new Azure service: -ServiceName $WorkerRoleName -Slot $Slot ($WorkerRolePackage)
+					#Parameter Set: PaaS
+					#New-AzureDeployment [-ServiceName] <String> [-Package] <String> [-Configuration] <String> [-Slot] <String> [[-Label] <String> ] [[-Name] <String> ] [-DoNotStart] [-ExtensionConfiguration <ExtensionConfigurationInput[]> ] [-TreatWarningsAsError] [ <CommonParameters>]
+					New-AzureDeployment -ServiceName $WorkerRoleName -Package $packageUrl -Configuration $configUrl -Slot $Slot -Name $WorkerRoleName
+				}
 			}
 			else
 			{
