@@ -103,7 +103,7 @@ function WorkerRole([string]$SubscriptionName, [string]$Location, [string]$Worke
 					Write-Host Deploying a new Azure service: -ServiceName $WorkerRoleName -Slot $Slot ($WorkerRolePackage)
 					#Parameter Set: PaaS
 					#New-AzureDeployment [-ServiceName] <String> [-Package] <String> [-Configuration] <String> [-Slot] <String> [[-Label] <String> ] [[-Name] <String> ] [-DoNotStart] [-ExtensionConfiguration <ExtensionConfigurationInput[]> ] [-TreatWarningsAsError] [ <CommonParameters>]
-					New-AzureDeployment -ServiceName $WorkerRoleName -Package $packageUrl -Configuration $configUrl -Slot $Slot -Name $WorkerRoleName
+					New-AzureDeployment -ServiceName $WorkerRoleName -Package $WorkerRolePackage -Configuration $WorkerRoleConfig -Slot $Slot -Name $WorkerRoleName
 				}
 			}
 			else
